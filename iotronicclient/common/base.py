@@ -159,6 +159,22 @@ class Manager(object):
         data = self._format_body_data(body, response_key)
         return [obj_class(self, res, loaded=True) for res in data if res]
 
+    def _create(self, code, device, name, latitude, longitude, altitude, mobile=None):
+	location = []
+	location.append( {"latitude": latitude, "longitude": longitude, "altitude": altitude} )
+        node = {"device": device, "code": code, "name": name, "location": location}
+        resp, body = self.api.json_request('POST', self._path(), body=node)
+        if body:
+            return self.resource_class(self, body)
+
+    def _delete(self, uuid):
+        """Delete a node by UUID.
+
+        :param uuid: Resource UUID identifier.
+        """
+        print (self._path(uuid))
+        self.api.raw_request('DELETE', self._path(uuid))
+
     def _update(self, resource_id, patch, method='PATCH'):
         """Update a resource.
 
@@ -172,13 +188,6 @@ class Manager(object):
         # PATCH/PUT requests may not return a body
         if body:
             return self.resource_class(self, body)
-
-    def _delete(self, resource_id):
-        """Delete a resource.
-
-        :param resource_id: Resource identifier.
-        """
-        self.api.raw_request('DELETE', self._path(resource_id))
 
 
 @six.add_metaclass(abc.ABCMeta)

@@ -190,8 +190,22 @@ class NodeManager(base.CreateManager):
         else:
             raise exc.NotFound()
 
-    def delete(self, node_id):
-        return self._delete(resource_id=node_id)
+    def create(self, args):
+        location = args.location.replace(" ","")
+	location = location.split(",")
+
+        if len(location) != 3:
+            print ("Wrong coordinates format. Insert coordinates like: 38.123,15.123,15.0")
+            return None
+        else:
+	    latitude = location[0]
+            longitude = location[1]
+            altitude = location[2]
+
+        return self._create(args.code, args.device, args.name, latitude, longitude, altitude, args.mobile)
+
+    def delete(self, uuid):
+        return self._delete(uuid=uuid)
 
     def update(self, node_id, patch, http_method='PATCH'):
         return self._update(resource_id=node_id, patch=patch,

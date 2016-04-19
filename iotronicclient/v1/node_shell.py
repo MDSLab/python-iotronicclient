@@ -203,69 +203,38 @@ def do_node_list(cc, args):
                         json_flag=args.json)
 
 
-@cliutils.arg(
-    '-c', '--chassis',
-    dest='chassis_uuid',
-    metavar='<chassis>',
-    help='UUID of the chassis that this node belongs to.')
-@cliutils.arg(
-    '--chassis_uuid',
-    help=argparse.SUPPRESS)
-@cliutils.arg(
-    '-d', '--driver',
-    metavar='<driver>',
-    required=True,
-    help='Driver used to control the node [REQUIRED].')
-@cliutils.arg(
-    '-i', '--driver-info',
-    metavar='<key=value>',
-    action='append',
-    help='Key/value pair used by the driver, such as out-of-band management '
-         'credentials. Can be specified multiple times.')
-@cliutils.arg(
-    '--driver_info',
-    action='append',
-    help=argparse.SUPPRESS)
-@cliutils.arg(
-    '-p', '--properties',
-    metavar='<key=value>',
-    action='append',
-    help='Key/value pair describing the physical characteristics of the '
-         'node. This is exported to Nova and used by the scheduler. '
-         'Can be specified multiple times.')
-@cliutils.arg(
-    '-e', '--extra',
-    metavar='<key=value>',
-    action='append',
-    help="Record arbitrary key/value metadata. "
-         "Can be specified multiple times.")
-@cliutils.arg(
-    '-u', '--uuid',
-    metavar='<uuid>',
-    help="Unique UUID for the node.")
-@cliutils.arg(
-    '-n', '--name',
+@cliutils.arg('code',
+    metavar='<code>',
+    help="Code.")
+@cliutils.arg('name',
     metavar='<name>',
     help="Unique name for the node.")
+@cliutils.arg(
+    '-d', '--device',
+    dest='device',
+    required=True,
+    metavar='<device>',
+    help='Device Type')
+@cliutils.arg(
+    '-l', '--location',
+    required=True,
+    metavar='<location>',
+    help="Node coordinates (latitude,longitude,altitude).")
+@cliutils.arg(
+    '-m', '--mobile',
+    metavar='<mobile>',
+    help="Flag for mobile.")
 def do_node_create(cc, args):
     """Register a new node with the Iotronic service."""
-    field_list = ['chassis_uuid', 'driver', 'driver_info',
-                  'properties', 'extra', 'uuid', 'name']
-    fields = dict((k, v) for (k, v) in vars(args).items()
-                  if k in field_list and not (v is None))
-    fields = utils.args_array_to_dict(fields, 'driver_info')
-    fields = utils.args_array_to_dict(fields, 'extra')
-    fields = utils.args_array_to_dict(fields, 'properties')
-    node = cc.node.create(**fields)
-
-    data = dict([(f, getattr(node, f, '')) for f in field_list])
-    cliutils.print_dict(data, wrap=72, json_flag=args.json)
+    node = cc.node.create(args)
+    if node != None:
+        _print_node_show(node)
 
 
-@cliutils.arg('node',
-              metavar='<node>',
+@cliutils.arg('uuid',
+              metavar='<uuid>',
               nargs='+',
-              help="Name or UUID of the node.")
+              help="UUID of the node.")
 def do_node_delete(cc, args):
     """Unregister node(s) from the Iotronic service.
 
@@ -273,7 +242,7 @@ def do_node_delete(cc, args):
     """
 
     failures = []
-    for n in args.node:
+    for n in args.code:
         try:
             cc.node.delete(n)
             print(_('Deleted node %s') % n)
