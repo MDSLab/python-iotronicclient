@@ -242,7 +242,7 @@ def do_node_delete(cc, args):
     """
 
     failures = []
-    for n in args.code:
+    for n in args.uuid:
         try:
             cc.node.delete(n)
             print(_('Deleted node %s') % n)
