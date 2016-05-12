@@ -1,11 +1,12 @@
 # python-iotronicclient
 Python client library for the IoTronic API
 
-In order to correctly run this client on your machine you need to have some python packages already installed which are:
+After cloning the git repository you have to install some python packages which are:
+* python-dev
 * python-oslo-utils
 * python-oslo-i18n
 * python-keystoneauth1
 
-If any of them is not present you can use ```pip``` (https://pypi.python.org/pypi/pip) or OS-depending software package managers (e.g.: apt-get, dpkg, yum, etc...) to install them.
+The first package can be easily installed using any OS-depending software package managers (e.g.: apt-get, dpkg, yum, etc...). The other ones will be installed using ```pip``` (https://pypi.python.org/pypi/pip) from inside the git repository already downloaded by launching: ```sudo pip install -r requirements.txt```
 
-Once you have the previous packages installed you have to clone the git repository and then launch: ```sudo ./build.sh```
+Once you have the previous packages installed you have to launch: ```sudo ./build.sh``` and then test the iotronicclient for example by using the python shell.
