@@ -13,25 +13,11 @@
 #    under the License.
 
 import logging
-import os
-import time
-
-from oslo_utils import strutils
 
 from iotronicclient.common import base
 from iotronicclient.common.i18n import _
 from iotronicclient.common import utils
 from iotronicclient import exc
-
-
-_power_states = {
-    'on': 'power on',
-    'off': 'power off',
-    'reboot': 'rebooting',
-    'soft off': 'soft power off',
-    'soft reboot': 'soft rebooting',
-}
-
 
 LOG = logging.getLogger(__name__)
 _DEFAULT_POLL_INTERVAL = 2
@@ -91,14 +77,15 @@ class NodeManager(base.CreateManager):
         filters = utils.common_filters(marker, limit, sort_key, sort_dir,
                                        fields)
 
-        if project is not None:
-            filters.append('project_id=%s' % project)
-
         path = ''
+        self._path(path)
         if detail:
             path += 'detail'
         if filters:
             path += '?' + '&'.join(filters)
+        if project:
+            path += 'detail?' + '&project='+project
+
 
         if limit is None:
             return self._list(self._path(path), "nodes")

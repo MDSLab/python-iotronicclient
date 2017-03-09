@@ -206,23 +206,17 @@ def do_node_delete(cc, args):
 
 @cliutils.arg('node', metavar='<node>', help="Name or UUID of the node.")
 @cliutils.arg(
-    'op',
-    metavar='<op>',
-    choices=['add', 'replace', 'remove'],
-    help="Operation: 'add', 'replace', or 'remove'.")
-@cliutils.arg(
     'attributes',
     metavar='<path=value>',
     nargs='+',
     action='append',
     default=[],
-    help="Attribute to add, replace, or remove. Can be specified "
-         "multiple times. For 'remove', only <path> is necessary. "
-         "For nested attributes, separate the components with slashes, eg "
-         "'driver_info/deploy_kernel=uuid'.")
+    help="Values to be changed.")
 def do_node_update(cc, args):
     """Update information about a registered node."""
-    patch = utils.args_array_to_patch(args.op, args.attributes[0])
-    node = cc.node.update(args.node, patch)
+
+    patch = {k:v for k,v in (x.split('=') for x in args.attributes[0]) }
+
+    node = cc.node.update(args.node,patch )
     _print_node_show(node, json=args.json)
 
