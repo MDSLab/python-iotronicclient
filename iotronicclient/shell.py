@@ -68,9 +68,9 @@ class IotronicShell(object):
                             version=iotronicclient.__version__)
 
         parser.add_argument('--debug',
-                            default=bool(cliutils.env('IRONICCLIENT_DEBUG')),
+                            default=bool(cliutils.env('IOTRONICCLIENT_DEBUG')),
                             action='store_true',
-                            help=_('Defaults to env[IRONICCLIENT_DEBUG]'))
+                            help=_('Defaults to env[IOTRONICCLIENT_DEBUG]'))
 
         parser.add_argument('--json',
                             default=False,
@@ -146,18 +146,18 @@ class IotronicShell(object):
                             help=argparse.SUPPRESS)
 
         parser.add_argument('--iotronic-url',
-                            default=cliutils.env('IRONIC_URL'),
-                            help=_('Defaults to env[IRONIC_URL]'))
+                            default=cliutils.env('IOTRONIC_URL'),
+                            help=_('Defaults to env[IOTRONIC_URL]'))
 
         parser.add_argument('--iotronic_url',
                             help=argparse.SUPPRESS)
 
         parser.add_argument('--iotronic-api-version',
                             default=cliutils.env(
-                                'IRONIC_API_VERSION', default='1'),
+                                'IOTRONIC_API_VERSION', default='1'),
                             help=_('Accepts 1.x (where "x" is microversion) '
                                    'or "latest", Defaults to '
-                                   'env[IRONIC_API_VERSION] or 1'))
+                                   'env[IOTRONIC_API_VERSION] or 1'))
 
         parser.add_argument('--iotronic_api_version',
                             help=argparse.SUPPRESS)
@@ -221,20 +221,20 @@ class IotronicShell(object):
                             help=_('Defaults to env[OS_PROJECT_DOMAIN_NAME].'))
 
         msg = _('Maximum number of retries in case of conflict error '
-                '(HTTP 409). Defaults to env[IRONIC_MAX_RETRIES] or %d. '
+                '(HTTP 409). Defaults to env[IOTRONIC_MAX_RETRIES] or %d. '
                 'Use 0 to disable retrying.') % http.DEFAULT_MAX_RETRIES
         parser.add_argument('--max-retries', type=int, help=msg,
                             default=cliutils.env(
-                                'IRONIC_MAX_RETRIES',
+                                'IOTRONIC_MAX_RETRIES',
                                 default=str(http.DEFAULT_MAX_RETRIES)))
 
         msg = _('Amount of time (in seconds) between retries '
                 'in case of conflict error (HTTP 409). '
-                'Defaults to env[IRONIC_RETRY_INTERVAL] '
+                'Defaults to env[IOTRONIC_RETRY_INTERVAL] '
                 'or %d.') % http.DEFAULT_RETRY_INTERVAL
         parser.add_argument('--retry-interval', type=int, help=msg,
                             default=cliutils.env(
-                                'IRONIC_RETRY_INTERVAL',
+                                'IOTRONIC_RETRY_INTERVAL',
                                 default=str(http.DEFAULT_RETRY_INTERVAL)))
 
         return parser

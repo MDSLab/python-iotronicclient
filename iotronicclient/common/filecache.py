@@ -29,7 +29,7 @@ PROGNAME = 'python-iotronicclient'
 
 CACHE = None
 CACHE_DIR = appdirs.user_cache_dir(PROGNAME, AUTHOR)
-CACHE_EXPIRY_ENV_VAR = 'IRONICCLIENT_CACHE_EXPIRY'  # environment variable
+CACHE_EXPIRY_ENV_VAR = 'IOTRONICCLIENT_CACHE_EXPIRY'  # environment variable
 CACHE_FILENAME = os.path.join(CACHE_DIR, 'iotronic-api-version.dbm')
 DEFAULT_EXPIRY = 300  # seconds
 
