@@ -12,11 +12,11 @@
 
 
 from iotronicclient.common import utils
-from iotronicclient.v1 import node_shell
+from iotronicclient.v1 import board_shell
 
 
 COMMAND_MODULES = [
-    node_shell,
+    board_shell,
 ]
 
 

@@ -20,7 +20,7 @@ class Resource(object):
     """Resource class
 
     This class is used to manage the various fields that a resource (e.g.
-    Chassis, Node, Port) contains.  An individual field consists of a
+    Chassis, Board, Port) contains.  An individual field consists of a
     'field_id' (key) and a 'label' (value).  The caller only provides the
     'field_ids' when instantiating the object.
 
@@ -33,7 +33,7 @@ class Resource(object):
     FIELDS = {
         'name': 'Name',
         'project': 'Project',
-        'node_uuid': 'Node UUID',
+        'board_uuid': 'Board UUID',
         'uuid': 'UUID',
         'extra': 'Extra',
         'updated_at': 'Updated At',
@@ -132,7 +132,7 @@ class Resource(object):
         return self._sort_labels
 
 
-# Nodes
+# Boards
 NODE_DETAILED_RESOURCE = Resource(
     [
         'uuid',
@@ -152,7 +152,7 @@ NODE_DETAILED_RESOURCE = Resource(
      ],
     sort_excluded=[
         # The server cannot sort on "chassis_uuid" because it isn't a column in
-        # the "nodes" database table. "chassis_id" is stored, but it is
+        # the "boards" database table. "chassis_id" is stored, but it is
         # internal to iotronic. See bug #1443003 for more details.
         'extra','location','session',
     ])
@@ -170,7 +170,7 @@ PORT_DETAILED_RESOURCE = Resource(
      'address',
      'created_at',
      'extra',
-     'node_uuid',
+     'board_uuid',
      'local_link_connection',
      'portgroup_uuid',
      'pxe_enabled',
@@ -179,11 +179,11 @@ PORT_DETAILED_RESOURCE = Resource(
      ],
     sort_excluded=[
         'extra',
-        # The server cannot sort on "node_uuid" or "portgroup_uuid" because
-        # they aren't columns in the "ports" database table. "node_id" and
+        # The server cannot sort on "board_uuid" or "portgroup_uuid" because
+        # they aren't columns in the "ports" database table. "board_id" and
         # "portgroup_id" are stored, but it is internal to iotronic.
         # See bug #1443003 for more details.
-        'node_uuid',
+        'board_uuid',
         'portgroup_uuid',
         'internal_info',
     ])
@@ -199,7 +199,7 @@ PORTGROUP_DETAILED_RESOURCE = Resource(
      'created_at',
      'extra',
      'standalone_ports_supported',
-     'node_uuid',
+     'board_uuid',
      'name',
      'updated_at',
      'internal_info',
@@ -208,10 +208,10 @@ PORTGROUP_DETAILED_RESOURCE = Resource(
      ],
     sort_excluded=[
         'extra',
-        # The server cannot sort on "node_uuid" because it isn't a column in
-        # the "portgroups" database table. "node_id" is stored, but it is
+        # The server cannot sort on "board_uuid" because it isn't a column in
+        # the "portgroups" database table. "board_id" is stored, but it is
         # internal to iotronic. See bug #1443003 for more details.
-        'node_uuid',
+        'board_uuid',
         'internal_info',
         'properties',
     ])

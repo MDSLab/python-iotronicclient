@@ -128,9 +128,9 @@ class Manager(object):
         is None this function will continue pagination until there are
         no more values to be returned.
 
-        :param url: a partial URL, e.g. '/nodes'
+        :param url: a partial URL, e.g. '/boards'
         :param response_key: the key to be looked up in response
-            dictionary, e.g. 'nodes'
+            dictionary, e.g. 'boards'
         :param obj_class: class for constructing the returned objects.
         :param limit: maximum number of items to return. If None returns
             everything.

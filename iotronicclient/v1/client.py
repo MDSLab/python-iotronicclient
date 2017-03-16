@@ -18,7 +18,7 @@ from iotronicclient.common import http
 from iotronicclient.common.http import DEFAULT_VER
 from iotronicclient.common.i18n import _
 from iotronicclient import exc
-from iotronicclient.v1 import node
+from iotronicclient.v1 import board
 
 
 class Client(object):
@@ -55,5 +55,5 @@ class Client(object):
         self.http_client = http._construct_http_client(
             endpoint, *args, **kwargs)
 
-        self.node = node.NodeManager(self.http_client)
+        self.board = board.BoardManager(self.http_client)
 

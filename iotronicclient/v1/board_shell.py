@@ -25,19 +25,19 @@ from iotronicclient.v1 import resource_fields as res_fields
 from iotronicclient.v1 import utils as v1_utils
 
 
-def _print_node_show(node, fields=None, json=False):
+def _print_board_show(board, fields=None, json=False):
     if fields is None:
         fields = res_fields.NODE_DETAILED_RESOURCE.fields
 
     data = dict(
-        [(f, getattr(node, f, '')) for f in fields])
+        [(f, getattr(board, f, '')) for f in fields])
     cliutils.print_dict(data, wrap=72, json_flag=json)
 
 
 @cliutils.arg(
-    'node',
+    'board',
     metavar='<id>',
-    help="Name or UUID of the node ")
+    help="Name or UUID of the board ")
 @cliutils.arg(
     '--fields',
     nargs='+',
@@ -45,34 +45,34 @@ def _print_node_show(node, fields=None, json=False):
     metavar='<field>',
     action='append',
     default=[],
-    help="One or more node fields. Only these fields will be fetched from "
+    help="One or more board fields. Only these fields will be fetched from "
          "the server.")
-def do_node_show(cc, args):
-    """Show detailed information about a node."""
+def do_board_show(cc, args):
+    """Show detailed information about a board."""
     fields = args.fields[0] if args.fields else None
-    utils.check_empty_arg(args.node, '<id>')
+    utils.check_empty_arg(args.board, '<id>')
     utils.check_for_invalid_fields(
         fields, res_fields.NODE_DETAILED_RESOURCE.fields)
-    node = cc.node.get(args.node, fields=fields)
-    _print_node_show(node, fields=fields, json=args.json)
+    board = cc.board.get(args.board, fields=fields)
+    _print_board_show(board, fields=fields, json=args.json)
 
 
 @cliutils.arg(
     '--limit',
     metavar='<limit>',
     type=int,
-    help='Maximum number of nodes to return per request, '
+    help='Maximum number of boards to return per request, '
          '0 for no limit. Default is the maximum number used '
          'by the Iotronic API Service.')
 @cliutils.arg(
     '--marker',
-    metavar='<node>',
-    help='Node UUID (for example, of the last node in the list from '
-         'a previous request). Returns the list of nodes after this UUID.')
+    metavar='<board>',
+    help='Board UUID (for example, of the last board in the list from '
+         'a previous request). Returns the list of boards after this UUID.')
 @cliutils.arg(
     '--sort-key',
     metavar='<field>',
-    help='Node field that will be used for sorting.')
+    help='Board field that will be used for sorting.')
 @cliutils.arg(
     '--sort-dir',
     metavar='<direction>',
@@ -87,7 +87,7 @@ def do_node_show(cc, args):
     dest='detail',
     action='store_true',
     default=False,
-    help="Show detailed information about the nodes.")
+    help="Show detailed information about the boards.")
 @cliutils.arg(
     '--fields',
     nargs='+',
@@ -95,10 +95,10 @@ def do_node_show(cc, args):
     metavar='<field>',
     action='append',
     default=[],
-    help="One or more node fields. Only these fields will be fetched from "
+    help="One or more board fields. Only these fields will be fetched from "
          "the server. Can not be used when '--detail' is specified.")
-def do_node_list(cc, args):
-    """List the nodes which are registered with the Iotronic service."""
+def do_board_list(cc, args):
+    """List the boards which are registered with the Iotronic service."""
     params = {}
 
     if args.project is not None:
@@ -123,8 +123,8 @@ def do_node_list(cc, args):
     params.update(utils.common_params_for_list(args,
                                                sort_fields,
                                                sort_field_labels))
-    nodes = cc.node.list(**params)
-    cliutils.print_list(nodes, fields,
+    boards = cc.board.list(**params)
+    cliutils.print_list(boards, fields,
                         field_labels=field_labels,
                         sortby_index=None,
                         json_flag=args.json)
@@ -132,33 +132,33 @@ def do_node_list(cc, args):
 @cliutils.arg(
     'name',
     metavar='<name>',
-    help="Name or UUID of the node ")
+    help="Name or UUID of the board ")
 @cliutils.arg(
     'code',
     metavar='<code>',
-    help="Codeof the node ")
+    help="Codeof the board ")
 @cliutils.arg(
     'type',
     metavar='<type>',
-    help="Type of the node ")
+    help="Type of the board ")
 @cliutils.arg(
     'latitude',
     metavar='<latitude>',
-    help="Latitude of the node ")
+    help="Latitude of the board ")
 @cliutils.arg(
     'longitude',
     metavar='<longitude>',
-    help="Longitude of the node ")
+    help="Longitude of the board ")
 @cliutils.arg(
     'altitude',
     metavar='<altitude>',
-    help="Altitude of the node ")
+    help="Altitude of the board ")
 @cliutils.arg(
     '-m','--mobile',
     dest='mobile',
     action='store_true',
     default=False,
-    help="Set a mobile node")
+    help="Set a mobile board")
 @cliutils.arg(
     '-e', '--extra',
     metavar='<key=value>',
@@ -166,8 +166,8 @@ def do_node_list(cc, args):
     help="Record arbitrary key/value metadata. "
          "Can be specified multiple times.")
 
-def do_node_create(cc, args):
-    """Register a new node with the Iotronic service."""
+def do_board_create(cc, args):
+    """Register a new board with the Iotronic service."""
     field_list = ['name','code','type','mobile','extra']
 
     fields = dict((k, v) for (k, v) in vars(args).items()
@@ -176,35 +176,35 @@ def do_node_create(cc, args):
 
     fields['location']=[{'latitude':args.latitude,'longitude':args.longitude,'altitude':args.altitude}]
 
-    node = cc.node.create(**fields)
+    board = cc.board.create(**fields)
 
-    data = dict([(f, getattr(node, f, '')) for f in field_list])
+    data = dict([(f, getattr(board, f, '')) for f in field_list])
     cliutils.print_dict(data, wrap=72, json_flag=args.json)
 
 
-@cliutils.arg('node',
-              metavar='<node>',
+@cliutils.arg('board',
+              metavar='<board>',
               nargs='+',
-              help="Name or UUID of the node.")
-def do_node_delete(cc, args):
-    """Unregister node(s) from the Iotronic service.
+              help="Name or UUID of the board.")
+def do_board_delete(cc, args):
+    """Unregister board(s) from the Iotronic service.
 
-    Returns errors for any nodes that could not be unregistered.
+    Returns errors for any boards that could not be unregistered.
     """
 
     failures = []
-    for n in args.node:
+    for n in args.board:
         try:
-            cc.node.delete(n)
-            print(_('Deleted node %s') % n)
+            cc.board.delete(n)
+            print(_('Deleted board %s') % n)
         except exceptions.ClientException as e:
-            failures.append(_("Failed to delete node %(node)s: %(error)s")
-                            % {'node': n, 'error': e})
+            failures.append(_("Failed to delete board %(board)s: %(error)s")
+                            % {'board': n, 'error': e})
     if failures:
         raise exceptions.ClientException("\n".join(failures))
 
 
-@cliutils.arg('node', metavar='<node>', help="Name or UUID of the node.")
+@cliutils.arg('board', metavar='<board>', help="Name or UUID of the board.")
 @cliutils.arg(
     'attributes',
     metavar='<path=value>',
@@ -212,11 +212,11 @@ def do_node_delete(cc, args):
     action='append',
     default=[],
     help="Values to be changed.")
-def do_node_update(cc, args):
-    """Update information about a registered node."""
+def do_board_update(cc, args):
+    """Update information about a registered board."""
 
     patch = {k:v for k,v in (x.split('=') for x in args.attributes[0]) }
 
-    node = cc.node.update(args.node,patch )
-    _print_node_show(node, json=args.json)
+    board = cc.board.update(args.board,patch )
+    _print_board_show(board, json=args.json)
 

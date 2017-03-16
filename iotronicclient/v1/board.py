@@ -23,35 +23,35 @@ LOG = logging.getLogger(__name__)
 _DEFAULT_POLL_INTERVAL = 2
 
 
-class Node(base.Resource):
+class Board(base.Resource):
     def __repr__(self):
-        return "<Node %s>" % self._info
+        return "<Board %s>" % self._info
 
 
-class NodeManager(base.CreateManager):
-    resource_class = Node
+class BoardManager(base.CreateManager):
+    resource_class = Board
     _creation_attributes = ['name','code','type','location','mobile','extra']
-    _resource_name = 'nodes'
+    _resource_name = 'boards'
 
     def list(self, marker=None, limit=None,
              detail=False, sort_key=None, sort_dir=None, fields=None,
              project=None):
-        """Retrieve a list of nodes.
+        """Retrieve a list of boards.
 
-        :param marker: Optional, the UUID of a node, eg the last
-                       node from a previous result set. Return
+        :param marker: Optional, the UUID of a board, eg the last
+                       board from a previous result set. Return
                        the next result set.
         :param limit: The maximum number of results to return per
                       request, if:
 
-            1) limit > 0, the maximum number of nodes to return.
-            2) limit == 0, return the entire list of nodes.
+            1) limit > 0, the maximum number of boards to return.
+            2) limit == 0, return the entire list of boards.
             3) limit param is NOT specified (None), the number of items
                returned respect the maximum imposed by the Iotronic API
                (see Iotronic's api.max_limit option).
 
         :param detail: Optional, boolean whether to return detailed information
-                       about nodes.
+                       about boards.
 
         :param sort_key: Optional, field used for sorting.
 
@@ -62,9 +62,9 @@ class NodeManager(base.CreateManager):
                        of the resource to be returned. Can not be used
                        when 'detail' is set.
 
-        :param project: Optional string value to get only nodes of the project.
+        :param project: Optional string value to get only boards of the project.
 
-        :returns: A list of nodes.
+        :returns: A list of boards.
 
         """
         if limit is not None:
@@ -88,17 +88,17 @@ class NodeManager(base.CreateManager):
 
 
         if limit is None:
-            return self._list(self._path(path), "nodes")
+            return self._list(self._path(path), "boards")
         else:
-            return self._list_pagination(self._path(path), "nodes",
+            return self._list_pagination(self._path(path), "boards",
                                          limit=limit)
 
-    def get(self, node_id, fields=None):
-        return self._get(resource_id=node_id, fields=fields)
+    def get(self, board_id, fields=None):
+        return self._get(resource_id=board_id, fields=fields)
 
-    def delete(self, node_id):
-        return self._delete(resource_id=node_id)
+    def delete(self, board_id):
+        return self._delete(resource_id=board_id)
 
-    def update(self, node_id, patch, http_method='PATCH'):
-        return self._update(resource_id=node_id, patch=patch,
+    def update(self, board_id, patch, http_method='PATCH'):
+        return self._update(resource_id=board_id, patch=patch,
                             method=http_method)
