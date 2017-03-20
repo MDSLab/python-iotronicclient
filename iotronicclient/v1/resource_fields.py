@@ -46,6 +46,8 @@ class Resource(object):
         'location': 'Location',
         'owner': 'Owner',
         'type': 'Type',
+        'callable': 'Callable',
+        'public': 'Public',
 
 
         'address': 'Address',
@@ -133,7 +135,7 @@ class Resource(object):
 
 
 # Boards
-NODE_DETAILED_RESOURCE = Resource(
+BOARD_DETAILED_RESOURCE = Resource(
     [
         'uuid',
         'name',
@@ -151,17 +153,36 @@ NODE_DETAILED_RESOURCE = Resource(
 
      ],
     sort_excluded=[
-        # The server cannot sort on "chassis_uuid" because it isn't a column in
-        # the "boards" database table. "chassis_id" is stored, but it is
-        # internal to iotronic. See bug #1443003 for more details.
         'extra','location','session',
     ])
-NODE_RESOURCE = Resource(
+BOARD_RESOURCE = Resource(
     ['uuid',
      'name',
      'type',
      'status',
      'session',
+     ])
+
+# Plugins
+PLUGIN_DETAILED_RESOURCE = Resource(
+    ['uuid',
+     'name',
+     'owner',
+     'code',
+     'public',
+     'callable',
+     'extra'
+
+     ],
+    sort_excluded=[
+        'extra','code',
+    ])
+PLUGIN_RESOURCE = Resource(
+    ['uuid',
+     'name',
+     'owner',
+     'public',
+     'callable',
      ])
 
 # Ports

@@ -13,10 +13,12 @@
 
 from iotronicclient.common import utils
 from iotronicclient.v1 import board_shell
+from iotronicclient.v1 import plugin_shell
 
 
 COMMAND_MODULES = [
     board_shell,
+    plugin_shell,
 ]
 
 

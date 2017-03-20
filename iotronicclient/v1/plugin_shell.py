@@ -22,19 +22,19 @@ from iotronicclient.v1 import resource_fields as res_fields
 from iotronicclient.v1 import utils as v1_utils
 
 
-def _print_board_show(board, fields=None, json=False):
+def _print_plugin_show(plugin, fields=None, json=False):
     if fields is None:
-        fields = res_fields.BOARD_DETAILED_RESOURCE.fields
+        fields = res_fields.PLUGIN_DETAILED_RESOURCE.fields
 
     data = dict(
-        [(f, getattr(board, f, '')) for f in fields])
+        [(f, getattr(plugin, f, '')) for f in fields])
     cliutils.print_dict(data, wrap=72, json_flag=json)
 
 
 @cliutils.arg(
-    'board',
+    'plugin',
     metavar='<id>',
-    help="Name or UUID of the board ")
+    help="Name or UUID of the plugin ")
 @cliutils.arg(
     '--fields',
     nargs='+',
@@ -42,34 +42,34 @@ def _print_board_show(board, fields=None, json=False):
     metavar='<field>',
     action='append',
     default=[],
-    help="One or more board fields. Only these fields will be fetched from "
+    help="One or more plugin fields. Only these fields will be fetched from "
          "the server.")
-def do_board_show(cc, args):
-    """Show detailed information about a board."""
+def do_plugin_show(cc, args):
+    """Show detailed information about a plugin."""
     fields = args.fields[0] if args.fields else None
-    utils.check_empty_arg(args.board, '<id>')
+    utils.check_empty_arg(args.plugin, '<id>')
     utils.check_for_invalid_fields(
-        fields, res_fields.BOARD_DETAILED_RESOURCE.fields)
-    board = cc.board.get(args.board, fields=fields)
-    _print_board_show(board, fields=fields, json=args.json)
+        fields, res_fields.PLUGIN_DETAILED_RESOURCE.fields)
+    plugin = cc.plugin.get(args.plugin, fields=fields)
+    _print_plugin_show(plugin, fields=fields, json=args.json)
 
 
 @cliutils.arg(
     '--limit',
     metavar='<limit>',
     type=int,
-    help='Maximum number of boards to return per request, '
+    help='Maximum number of plugins to return per request, '
          '0 for no limit. Default is the maximum number used '
          'by the Iotronic API Service.')
 @cliutils.arg(
     '--marker',
-    metavar='<board>',
-    help='Board UUID (for example, of the last board in the list from '
-         'a previous request). Returns the list of boards after this UUID.')
+    metavar='<plugin>',
+    help='Plugin UUID (for example, of the last plugin in the list from '
+         'a previous request). Returns the list of plugins after this UUID.')
 @cliutils.arg(
     '--sort-key',
     metavar='<field>',
-    help='Board field that will be used for sorting.')
+    help='Plugin field that will be used for sorting.')
 @cliutils.arg(
     '--sort-dir',
     metavar='<direction>',
@@ -84,7 +84,7 @@ def do_board_show(cc, args):
     dest='detail',
     action='store_true',
     default=False,
-    help="Show detailed information about the boards.")
+    help="Show detailed information about the plugins.")
 @cliutils.arg(
     '--fields',
     nargs='+',
@@ -92,36 +92,36 @@ def do_board_show(cc, args):
     metavar='<field>',
     action='append',
     default=[],
-    help="One or more board fields. Only these fields will be fetched from "
+    help="One or more plugin fields. Only these fields will be fetched from "
          "the server. Can not be used when '--detail' is specified.")
-def do_board_list(cc, args):
-    """List the boards which are registered with the Iotronic service."""
+def do_plugin_list(cc, args):
+    """List the plugins which are registered with the Iotronic service."""
     params = {}
 
     if args.project is not None:
         params['project'] = args.project
 
     if args.detail:
-        fields = res_fields.BOARD_DETAILED_RESOURCE.fields
-        field_labels = res_fields.BOARD_DETAILED_RESOURCE.labels
+        fields = res_fields.PLUGIN_DETAILED_RESOURCE.fields
+        field_labels = res_fields.PLUGIN_DETAILED_RESOURCE.labels
     elif args.fields:
         utils.check_for_invalid_fields(
-            args.fields[0], res_fields.BOARD_DETAILED_RESOURCE.fields)
+            args.fields[0], res_fields.PLUGIN_DETAILED_RESOURCE.fields)
         resource = res_fields.Resource(args.fields[0])
         fields = resource.fields
         field_labels = resource.labels
     else:
-        fields = res_fields.BOARD_RESOURCE.fields
-        field_labels = res_fields.BOARD_RESOURCE.labels
+        fields = res_fields.PLUGIN_RESOURCE.fields
+        field_labels = res_fields.PLUGIN_RESOURCE.labels
 
-    sort_fields = res_fields.BOARD_DETAILED_RESOURCE.sort_fields
-    sort_field_labels = res_fields.BOARD_DETAILED_RESOURCE.sort_labels
+    sort_fields = res_fields.PLUGIN_DETAILED_RESOURCE.sort_fields
+    sort_field_labels = res_fields.PLUGIN_DETAILED_RESOURCE.sort_labels
 
     params.update(utils.common_params_for_list(args,
                                                sort_fields,
                                                sort_field_labels))
-    boards = cc.board.list(**params)
-    cliutils.print_list(boards, fields,
+    plugins = cc.plugin.list(**params)
+    cliutils.print_list(plugins, fields,
                         field_labels=field_labels,
                         sortby_index=None,
                         json_flag=args.json)
@@ -129,33 +129,23 @@ def do_board_list(cc, args):
 @cliutils.arg(
     'name',
     metavar='<name>',
-    help="Name or UUID of the board ")
+    help="Name or UUID of the plugin ")
 @cliutils.arg(
     'code',
-    metavar='<code>',
-    help="Codeof the board ")
+    metavar='<plugin-file>',
+    help="Code of the plugin")
 @cliutils.arg(
-    'type',
-    metavar='<type>',
-    help="Type of the board ")
-@cliutils.arg(
-    'latitude',
-    metavar='<latitude>',
-    help="Latitude of the board ")
-@cliutils.arg(
-    'longitude',
-    metavar='<longitude>',
-    help="Longitude of the board ")
-@cliutils.arg(
-    'altitude',
-    metavar='<altitude>',
-    help="Altitude of the board ")
-@cliutils.arg(
-    '--mobile',
-    dest='mobile',
+    '--callable',
+    dest='callable',
     action='store_true',
     default=False,
-    help="Set a mobile board")
+    help="Set a callable plugin")
+@cliutils.arg(
+    '--is-plublic',
+    dest='public',
+    action='store_true',
+    default=False,
+    help="Set a public plugin")
 @cliutils.arg(
     '-e', '--extra',
     metavar='<key=value>',
@@ -163,45 +153,48 @@ def do_board_list(cc, args):
     help="Record arbitrary key/value metadata. "
          "Can be specified multiple times.")
 
-def do_board_create(cc, args):
-    """Register a new board with the Iotronic service."""
-    field_list = ['name','code','type','mobile','extra']
+def do_plugin_create(cc, args):
+    """Register a new plugin with the Iotronic service."""
+
+    field_list = ['name','code','callable','public','extra']
 
     fields = dict((k, v) for (k, v) in vars(args).items()
                   if k in field_list and not (v is None))
     fields = utils.args_array_to_dict(fields, 'extra')
 
-    fields['location']=[{'latitude':args.latitude,'longitude':args.longitude,'altitude':args.altitude}]
+    f=fields['code']
+    with open(f, 'r') as fil:
+        fields['code'] = fil.read()
 
-    board = cc.board.create(**fields)
+    plugin = cc.plugin.create(**fields)
 
-    data = dict([(f, getattr(board, f, '')) for f in field_list])
+    data = dict([(f, getattr(plugin, f, '')) for f in field_list])
     cliutils.print_dict(data, wrap=72, json_flag=args.json)
 
 
-@cliutils.arg('board',
-              metavar='<board>',
+@cliutils.arg('plugin',
+              metavar='<plugin>',
               nargs='+',
-              help="Name or UUID of the board.")
-def do_board_delete(cc, args):
-    """Unregister board(s) from the Iotronic service.
+              help="Name or UUID of the plugin.")
+def do_plugin_delete(cc, args):
+    """Unregister plugin(s) from the Iotronic service.
 
-    Returns errors for any boards that could not be unregistered.
+    Returns errors for any plugins that could not be unregistered.
     """
 
     failures = []
-    for n in args.board:
+    for n in args.plugin:
         try:
-            cc.board.delete(n)
-            print(_('Deleted board %s') % n)
+            cc.plugin.delete(n)
+            print(_('Deleted plugin %s') % n)
         except exceptions.ClientException as e:
-            failures.append(_("Failed to delete board %(board)s: %(error)s")
-                            % {'board': n, 'error': e})
+            failures.append(_("Failed to delete plugin %(plugin)s: %(error)s")
+                            % {'plugin': n, 'error': e})
     if failures:
         raise exceptions.ClientException("\n".join(failures))
 
 
-@cliutils.arg('board', metavar='<board>', help="Name or UUID of the board.")
+@cliutils.arg('plugin', metavar='<plugin>', help="Name or UUID of the plugin.")
 @cliutils.arg(
     'attributes',
     metavar='<path=value>',
@@ -209,11 +202,11 @@ def do_board_delete(cc, args):
     action='append',
     default=[],
     help="Values to be changed.")
-def do_board_update(cc, args):
-    """Update information about a registered board."""
+def do_plugin_update(cc, args):
+    """Update information about a registered plugin."""
 
     patch = {k:v for k,v in (x.split('=') for x in args.attributes[0]) }
 
-    board = cc.board.update(args.board,patch )
-    _print_board_show(board, json=args.json)
+    plugin = cc.plugin.update(args.plugin,patch )
+    _print_plugin_show(plugin, json=args.json)
 

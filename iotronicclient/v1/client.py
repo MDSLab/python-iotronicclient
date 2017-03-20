@@ -19,6 +19,7 @@ from iotronicclient.common.http import DEFAULT_VER
 from iotronicclient.common.i18n import _
 from iotronicclient import exc
 from iotronicclient.v1 import board
+from iotronicclient.v1 import plugin
 
 
 class Client(object):
@@ -56,4 +57,5 @@ class Client(object):
             endpoint, *args, **kwargs)
 
         self.board = board.BoardManager(self.http_client)
+        self.plugin = plugin.PluginManager(self.http_client)
 
