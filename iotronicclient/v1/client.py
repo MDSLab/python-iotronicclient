@@ -20,7 +20,7 @@ from iotronicclient.common.i18n import _
 from iotronicclient import exc
 from iotronicclient.v1 import board
 from iotronicclient.v1 import plugin
-
+from iotronicclient.v1 import plugin_injection
 
 class Client(object):
     """Client for the Iotronic v1 API.
@@ -58,4 +58,5 @@ class Client(object):
 
         self.board = board.BoardManager(self.http_client)
         self.plugin = plugin.PluginManager(self.http_client)
+        self.plugin_injection = plugin_injection.InjectionPluginManager(self.http_client)
 

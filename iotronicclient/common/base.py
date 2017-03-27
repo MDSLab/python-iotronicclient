@@ -191,7 +191,10 @@ class Manager(object):
         resp, body = self.api.json_request(method, url, body=patch)
         # PATCH/PUT requests may not return a body
         if body:
-            return self.resource_class(self, body)
+            try:
+                return self.resource_class(self, body)
+            except Exception:
+                return body
 
     def _delete(self, resource_id):
         """Delete a resource.

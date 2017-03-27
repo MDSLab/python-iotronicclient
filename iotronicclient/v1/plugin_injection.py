@@ -21,20 +21,38 @@ LOG = logging.getLogger(__name__)
 _DEFAULT_POLL_INTERVAL = 2
 
 
-class Board(base.Resource):
+class InjectionPlugin(base.Resource):
     def __repr__(self):
-        return "<Board %s>" % self._info
+        return "<InjectionPlugin %s>" % self._info
 
 
-class BoardManager(base.CreateManager):
-    resource_class = Board
-    _creation_attributes = ['name','code','type','location','mobile','extra']
+class InjectionPluginManager(base.Manager):
+    resource_class = InjectionPlugin
     _resource_name = 'boards'
 
-    def list(self, marker=None, limit=None,
-             detail=False, sort_key=None, sort_dir=None, fields=None,
-             project=None):
+    def plugin_inject(self, board_ident, plugin_ident):
+        path = "%s/plugins" % board_ident
+        body = {"plugin":plugin_ident,
+                "onboot":False}
+
+        return  self._update(path, body, method='PUT')
+
+    def plugin_remove(self, board_ident, plugin_ident):
+        path = "%(board)s/plugins/%(plugin)s" % {'board':board_ident,'plugin':plugin_ident}
+        return self._delete(resource_id=path)
+
+    def plugin_action(self, board_ident, plugin_ident,action,params={}):
+        path = "%(board)s/plugins/%(plugin)s" % {'board': board_ident, 'plugin': plugin_ident}
+        body = {"action": action,
+                "parameters": params
+                }
+        return  self._update(path, body, method='POST')
+
+    def get_plugins_on_board(self,board_ident, marker=None, limit=None,
+             detail=False, sort_key=None, sort_dir=None, fields=None):
         """Retrieve a list of boards.
+
+        :param board_ident: the UUID or name of the board.
 
         :param marker: Optional, the UUID of a board, eg the last
                        board from a previous result set. Return
@@ -60,9 +78,7 @@ class BoardManager(base.CreateManager):
                        of the resource to be returned. Can not be used
                        when 'detail' is set.
 
-        :param project: Optional string value to get only boards of the project.
-
-        :returns: A list of boards.
+        :returns: A list of plugins injected on a board.
 
         """
         if limit is not None:
@@ -72,30 +88,14 @@ class BoardManager(base.CreateManager):
             raise exc.InvalidAttribute(_("Can't fetch a subset of fields "
                                          "with 'detail' set"))
 
-        filters = utils.common_filters(marker, limit, sort_key, sort_dir,
-                                       fields)
+        # filters = utils.common_filters(marker, limit, sort_key, sort_dir,
+        #                                fields)
 
-        path = ''
-        if detail:
-            path += 'detail'
-        if filters:
-            path += '?' + '&'.join(filters)
-        if project:
-            path += 'detail?' + '&project='+project
-
+        path = "%s/plugins" % board_ident
 
         if limit is None:
-            return self._list(self._path(path), "boards")
+            return self._list(self._path(path), "injections")
         else:
-            return self._list_pagination(self._path(path), "boards",
+
+            return self._list_pagination(self._path(path), "injections",
                                          limit=limit)
-
-    def get(self, board_id, fields=None):
-        return self._get(resource_id=board_id, fields=fields)
-
-    def delete(self, board_id):
-        return self._delete(resource_id=board_id)
-
-    def update(self, board_id, patch, http_method='PATCH'):
-        return self._update(resource_id=board_id, patch=patch,
-                            method=http_method)

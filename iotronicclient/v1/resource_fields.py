@@ -48,6 +48,10 @@ class Resource(object):
         'type': 'Type',
         'callable': 'Callable',
         'public': 'Public',
+        'onboot': 'On Boot',
+        'board_uuid': 'Board uuid',
+        'plugin_uuid': 'Plugin uuid',
+        'plugin': 'Plugin',
 
 
         'address': 'Address',
@@ -183,6 +187,24 @@ PLUGIN_RESOURCE = Resource(
      'owner',
      'public',
      'callable',
+     ])
+
+PLUGIN_INJECT_RESOURCE_ON_BOARD = Resource(
+    [
+     'plugin',
+     'status',
+     'onboot',
+     'created_at',
+     'updated_at',
+     ])
+
+PLUGIN_INJECT_RESOURCE = Resource(
+    ['board_uuid',
+     'plugin_uuid',
+     'status',
+     'onboot',
+     'created_at',
+     'updated_at',
      ])
 
 # Ports

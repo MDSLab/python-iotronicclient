@@ -216,4 +216,3 @@ def do_board_update(cc, args):
 
     board = cc.board.update(args.board,patch )
     _print_board_show(board, json=args.json)
-

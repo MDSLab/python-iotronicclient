@@ -193,7 +193,6 @@ def do_plugin_delete(cc, args):
     if failures:
         raise exceptions.ClientException("\n".join(failures))
 
-
 @cliutils.arg('plugin', metavar='<plugin>', help="Name or UUID of the plugin.")
 @cliutils.arg(
     'attributes',
