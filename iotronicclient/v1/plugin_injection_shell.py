@@ -92,7 +92,7 @@ def do_plugins_on_board(cc, args):
     fields = res_fields.PLUGIN_INJECT_RESOURCE_ON_BOARD.fields
     field_labels = res_fields.PLUGIN_INJECT_RESOURCE_ON_BOARD.labels
     """Show detailed information about a board."""
-    list = cc.plugin_injection.get_plugins_on_board(args.board)
+    list = cc.plugin_injection.plugins_on_board(args.board)
     cliutils.print_list(list, fields=fields,
                         field_labels=field_labels,
                         sortby_index=None,
