@@ -30,10 +30,10 @@ class InjectionPluginManager(base.Manager):
     resource_class = InjectionPlugin
     _resource_name = 'boards'
 
-    def plugin_inject(self, board_ident, plugin_ident):
+    def plugin_inject(self, board_ident, plugin_ident,onboot=False):
         path = "%s/plugins" % board_ident
         body = {"plugin":plugin_ident,
-                "onboot":False}
+                "onboot":onboot}
 
         return  self._update(path, body, method='PUT')
 
@@ -48,7 +48,7 @@ class InjectionPluginManager(base.Manager):
                 }
         return  self._update(path, body, method='POST')
 
-    def get_plugins_on_board(self,board_ident, marker=None, limit=None,
+    def plugins_on_board(self,board_ident, marker=None, limit=None,
              detail=False, sort_key=None, sort_dir=None, fields=None):
         """Retrieve a list of boards.
 

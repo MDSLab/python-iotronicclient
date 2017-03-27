@@ -38,9 +38,18 @@ def _print_injected(injection, fields=None, json=False):
 @cliutils.arg('plugin',
               metavar='<plugin>',
               help="Name or UUID of the plugin.")
+@cliutils.arg(
+    '--onboot',
+    dest='onboot',
+    action='store_true',
+    default=False,
+    help="Start the plugin on boot")
 def do_plugin_inject(cc, args):
+    onboot=False
+    if args.onboot:
+        onboot=True
     try:
-        cc.plugin_injection.plugin_inject(args.board, args.plugin)
+        cc.plugin_injection.plugin_inject(args.board, args.plugin,onboot)
         print(_('Injected plugin %(plugin)s from board %(board)s') % {'board':args.board,'plugin':args.plugin})
     except exceptions.ClientException as e:
         exceptions.ClientException(
@@ -76,7 +85,7 @@ def do_plugin_action(cc, args):
     'board',
     metavar='<id>',
     help="Name or UUID of the board ")
-def do_get_plugins_on_board(cc, args):
+def do_plugins_on_board(cc, args):
     fields = res_fields.PLUGIN_INJECT_RESOURCE_ON_BOARD.fields
     field_labels = res_fields.PLUGIN_INJECT_RESOURCE_ON_BOARD.labels
     """Show detailed information about a board."""
