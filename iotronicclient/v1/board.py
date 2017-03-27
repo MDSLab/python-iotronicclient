@@ -31,7 +31,7 @@ class BoardManager(base.CreateManager):
     _creation_attributes = ['name','code','type','location','mobile','extra']
     _resource_name = 'boards'
 
-    def list(self, marker=None, limit=None,
+    def list(self, status=None, marker=None, limit=None,
              detail=False, sort_key=None, sort_dir=None, fields=None,
              project=None):
         """Retrieve a list of boards.
@@ -65,6 +65,8 @@ class BoardManager(base.CreateManager):
         :returns: A list of boards.
 
         """
+
+
         if limit is not None:
             limit = int(limit)
 
@@ -74,15 +76,16 @@ class BoardManager(base.CreateManager):
 
         filters = utils.common_filters(marker, limit, sort_key, sort_dir,
                                        fields)
+        if project is not None:
+            filters.append('project=%s' % project)
+        if status is not None:
+            filters.append('status=%s' % status)
 
         path = ''
         if detail:
             path += 'detail'
         if filters:
             path += '?' + '&'.join(filters)
-        if project:
-            path += 'detail?' + '&project='+project
-
 
         if limit is None:
             return self._list(self._path(path), "boards")

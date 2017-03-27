@@ -71,6 +71,10 @@ def do_board_show(cc, args):
     metavar='<field>',
     help='Board field that will be used for sorting.')
 @cliutils.arg(
+    '--status',
+    metavar='<field>',
+    help='Filter by board status ')
+@cliutils.arg(
     '--sort-dir',
     metavar='<direction>',
     choices=['asc', 'desc'],
@@ -98,6 +102,9 @@ def do_board_list(cc, args):
     """List the boards which are registered with the Iotronic service."""
     params = {}
 
+    if args.status:
+        params['status']=args.status
+
     if args.project is not None:
         params['project'] = args.project
 
@@ -120,6 +127,7 @@ def do_board_list(cc, args):
     params.update(utils.common_params_for_list(args,
                                                sort_fields,
                                                sort_field_labels))
+
     boards = cc.board.list(**params)
     cliutils.print_list(boards, fields,
                         field_labels=field_labels,
