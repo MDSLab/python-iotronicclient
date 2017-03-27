@@ -30,26 +30,26 @@ class InjectionPluginManager(base.Manager):
     resource_class = InjectionPlugin
     _resource_name = 'boards'
 
-    def plugin_inject(self, board_ident, plugin_ident,onboot=False):
+    def plugin_inject(self, board_ident, plugin_ident, onboot=False):
         path = "%s/plugins" % board_ident
-        body = {"plugin":plugin_ident,
-                "onboot":onboot}
+        body = {"plugin": plugin_ident,
+                "onboot": onboot}
 
-        return  self._update(path, body, method='PUT')
+        return self._update(path, body, method='PUT')
 
     def plugin_remove(self, board_ident, plugin_ident):
-        path = "%(board)s/plugins/%(plugin)s" % {'board':board_ident,'plugin':plugin_ident}
+        path = "%(board)s/plugins/%(plugin)s" % {'board': board_ident, 'plugin': plugin_ident}
         return self._delete(resource_id=path)
 
-    def plugin_action(self, board_ident, plugin_ident,action,params={}):
+    def plugin_action(self, board_ident, plugin_ident, action, params={}):
         path = "%(board)s/plugins/%(plugin)s" % {'board': board_ident, 'plugin': plugin_ident}
         body = {"action": action,
                 "parameters": params
                 }
-        return  self._update(path, body, method='POST')
+        return self._update(path, body, method='POST')
 
-    def plugins_on_board(self,board_ident, marker=None, limit=None,
-             detail=False, sort_key=None, sort_dir=None, fields=None):
+    def plugins_on_board(self, board_ident, marker=None, limit=None,
+                         detail=False, sort_key=None, sort_dir=None, fields=None):
         """Retrieve a list of boards.
 
         :param board_ident: the UUID or name of the board.

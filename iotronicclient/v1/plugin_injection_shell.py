@@ -31,7 +31,6 @@ def _print_injected(injection, fields=None, json=False):
     cliutils.print_dict(data, wrap=72, json_flag=json)
 
 
-
 @cliutils.arg('board',
               metavar='<board>',
               help="Name or UUID of the board.")
@@ -45,15 +44,16 @@ def _print_injected(injection, fields=None, json=False):
     default=False,
     help="Start the plugin on boot")
 def do_plugin_inject(cc, args):
-    onboot=False
+    onboot = False
     if args.onboot:
-        onboot=True
+        onboot = True
     try:
-        cc.plugin_injection.plugin_inject(args.board, args.plugin,onboot)
-        print(_('Injected plugin %(plugin)s from board %(board)s') % {'board':args.board,'plugin':args.plugin})
+        cc.plugin_injection.plugin_inject(args.board, args.plugin, onboot)
+        print(_('Injected plugin %(plugin)s from board %(board)s') % {'board': args.board, 'plugin': args.plugin})
     except exceptions.ClientException as e:
         exceptions.ClientException(
             "Failed to inject plugin on board %(board)s: %(error)s" % {'board': args.board, 'error': e})
+
 
 @cliutils.arg('board',
               metavar='<board>',
@@ -63,10 +63,12 @@ def do_plugin_inject(cc, args):
               help="Name or UUID of the plugin.")
 def do_plugin_remove(cc, args):
     try:
-        cc.plugin_injection.plugin_remove(args.board,args.plugin)
-        print(_('Removed plugin %(plugin)s from board %(board)s') % {'board':args.board,'plugin':args.plugin})
+        cc.plugin_injection.plugin_remove(args.board, args.plugin)
+        print(_('Removed plugin %(plugin)s from board %(board)s') % {'board': args.board, 'plugin': args.plugin})
     except exceptions.ClientException as e:
-        exceptions.ClientException("Failed to remove plugin from board %(board)s: %(error)s" % {'board': args.board, 'error': e})
+        exceptions.ClientException(
+            "Failed to remove plugin from board %(board)s: %(error)s" % {'board': args.board, 'error': e})
+
 
 @cliutils.arg('board',
               metavar='<board>',
@@ -78,8 +80,9 @@ def do_plugin_remove(cc, args):
               metavar='<action>',
               help="action of the plugin.")
 def do_plugin_action(cc, args):
-    result = cc.plugin_injection.plugin_action(args.board,args.plugin,args.action)
+    result = cc.plugin_injection.plugin_action(args.board, args.plugin, args.action)
     print(_('%s') % result)
+
 
 @cliutils.arg(
     'board',
