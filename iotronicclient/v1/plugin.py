@@ -33,7 +33,7 @@ class PluginManager(base.CreateManager):
 
     def list(self, marker=None, limit=None,
              detail=False, sort_key=None, sort_dir=None, fields=None,
-             project=None):
+             with_publics=False,all_plugins=False):
         """Retrieve a list of plugins.
 
         :param marker: Optional, the UUID of a plugin, eg the last
@@ -59,8 +59,10 @@ class PluginManager(base.CreateManager):
         :param fields: Optional, a list with a specified set of fields
                        of the resource to be returned. Can not be used
                        when 'detail' is set.
-
-        :param project: Optional string value to get only plugins of the project.
+                       
+        :param with_public: Optional boolean value to get also public plugins.
+        
+        :param all_plugins: Optional boolean value to get all plugins.
 
         :returns: A list of plugins.
 
@@ -75,14 +77,17 @@ class PluginManager(base.CreateManager):
         filters = utils.common_filters(marker, limit, sort_key, sort_dir,
                                        fields)
 
+        if with_publics:
+            filters.append('with_publics=true')
+        if all_plugins:
+            filters.append('all_plugins=true')
+
         path = ''
         if detail:
             path += 'detail'
+
         if filters:
             path += '?' + '&'.join(filters)
-        if project:
-            path += 'detail?' + '&project='+project
-
 
         if limit is None:
             return self._list(self._path(path), "plugins")

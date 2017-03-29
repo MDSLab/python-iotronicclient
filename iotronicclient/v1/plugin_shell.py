@@ -76,15 +76,23 @@ def do_plugin_show(cc, args):
     choices=['asc', 'desc'],
     help='Sort direction: "asc" (the default) or "desc".')
 @cliutils.arg(
-    '--project',
-    metavar='<project>',
-    help="Project of the list.")
-@cliutils.arg(
     '--detail',
     dest='detail',
     action='store_true',
     default=False,
     help="Show detailed information about the plugins.")
+@cliutils.arg(
+    '--with-publics',
+    dest='with_publics',
+    action='store_true',
+    default=False,
+    help="with public plugins")
+@cliutils.arg(
+    '--all-plugins',
+    dest='all_plugins',
+    action='store_true',
+    default=False,
+    help="all plugins")
 @cliutils.arg(
     '--fields',
     nargs='+',
@@ -98,8 +106,9 @@ def do_plugin_list(cc, args):
     """List the plugins which are registered with the Iotronic service."""
     params = {}
 
-    if args.project is not None:
-        params['project'] = args.project
+    '''
+
+    '''
 
     if args.detail:
         fields = res_fields.PLUGIN_DETAILED_RESOURCE.fields
@@ -120,6 +129,14 @@ def do_plugin_list(cc, args):
     params.update(utils.common_params_for_list(args,
                                                sort_fields,
                                                sort_field_labels))
+
+
+    if args.with_publics:
+        params['with_publics'] = args.with_publics
+
+    if args.all_plugins:
+        params['all_plugins'] = args.all_plugins
+
     plugins = cc.plugin.list(**params)
     cliutils.print_list(plugins, fields,
                         field_labels=field_labels,
