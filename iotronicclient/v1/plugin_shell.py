@@ -185,7 +185,7 @@ def do_plugin_create(cc, args):
 
     plugin = cc.plugin.create(**fields)
 
-    data = dict([(f, getattr(plugin, f, '')) for f in field_list])
+    data = dict([(f, getattr(plugin, f, '')) for f in res_fields.PLUGIN_DETAILED_RESOURCE.fields])
     cliutils.print_dict(data, wrap=72, json_flag=args.json)
 
 

@@ -182,8 +182,7 @@ def do_board_create(cc, args):
     fields['location']=[{'latitude':args.latitude,'longitude':args.longitude,'altitude':args.altitude}]
 
     board = cc.board.create(**fields)
-
-    data = dict([(f, getattr(board, f, '')) for f in field_list])
+    data = dict([(f, getattr(board, f, '')) for f in res_fields.BOARD_DETAILED_RESOURCE.fields])
     cliutils.print_dict(data, wrap=72, json_flag=args.json)
 
 
