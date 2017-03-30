@@ -28,7 +28,7 @@ class Plugin(base.Resource):
 
 class PluginManager(base.CreateManager):
     resource_class = Plugin
-    _creation_attributes = ['name','code','public','callable','extra']
+    _creation_attributes = ['name','code','public','callable','parameters','extra']
     _resource_name = 'plugins'
 
     def list(self, marker=None, limit=None,

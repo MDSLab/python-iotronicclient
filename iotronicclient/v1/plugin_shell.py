@@ -106,9 +106,6 @@ def do_plugin_list(cc, args):
     """List the plugins which are registered with the Iotronic service."""
     params = {}
 
-    '''
-
-    '''
 
     if args.detail:
         fields = res_fields.PLUGIN_DETAILED_RESOURCE.fields
@@ -164,6 +161,10 @@ def do_plugin_list(cc, args):
     default=False,
     help="Set a public plugin")
 @cliutils.arg(
+    '--params',
+    metavar='<parameters>',
+    help="Parameters file for the plugin")
+@cliutils.arg(
     '-e', '--extra',
     metavar='<key=value>',
     action='append',
@@ -177,11 +178,16 @@ def do_plugin_create(cc, args):
 
     fields = dict((k, v) for (k, v) in vars(args).items()
                   if k in field_list and not (v is None))
+    print fields
     fields = utils.args_array_to_dict(fields, 'extra')
 
     f=fields['code']
     with open(f, 'r') as fil:
         fields['code'] = fil.read()
+
+    if args.params:
+        fields['parameters'] = utils.json_from_file(args.params)
+
 
     plugin = cc.plugin.create(**fields)
 

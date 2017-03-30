@@ -33,7 +33,6 @@ class Resource(object):
     FIELDS = {
         'name': 'Name',
         'project': 'Project',
-        'board_uuid': 'Board UUID',
         'uuid': 'UUID',
         'extra': 'Extra',
         'updated_at': 'Updated At',
@@ -52,6 +51,7 @@ class Resource(object):
         'board_uuid': 'Board uuid',
         'plugin_uuid': 'Plugin uuid',
         'plugin': 'Plugin',
+        'parameters': 'Parameters',
 
 
         'address': 'Address',

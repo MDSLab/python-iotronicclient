@@ -95,6 +95,10 @@ def split_and_deserialize(string):
 
     return (key, value)
 
+def json_from_file(file):
+    with open(file, 'r') as pfil:
+        return json.load(pfil)
+
 
 def key_value_pairs_to_dict(key_value_pairs):
     """Convert a list of key-value pairs to a dictionary.
