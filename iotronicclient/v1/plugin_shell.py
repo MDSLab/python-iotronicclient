@@ -83,7 +83,7 @@ def do_plugin_show(cc, args):
     help="Show detailed information about the plugins.")
 @cliutils.arg(
     '--with-publics',
-    dest='with_publics',
+    dest='with_public',
     action='store_true',
     default=False,
     help="with public plugins")
@@ -131,8 +131,8 @@ def do_plugin_list(cc, args):
                                                sort_field_labels))
 
 
-    if args.with_publics:
-        params['with_publics'] = args.with_publics
+    if args.with_public:
+        params['with_public'] = args.with_public
 
     if args.all_plugins:
         params['all_plugins'] = args.all_plugins

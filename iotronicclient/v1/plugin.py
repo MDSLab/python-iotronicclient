@@ -33,7 +33,7 @@ class PluginManager(base.CreateManager):
 
     def list(self, marker=None, limit=None,
              detail=False, sort_key=None, sort_dir=None, fields=None,
-             with_publics=False,all_plugins=False):
+             with_public=False,all_plugins=False):
         """Retrieve a list of plugins.
 
         :param marker: Optional, the UUID of a plugin, eg the last
@@ -77,8 +77,8 @@ class PluginManager(base.CreateManager):
         filters = utils.common_filters(marker, limit, sort_key, sort_dir,
                                        fields)
 
-        if with_publics:
-            filters.append('with_publics=true')
+        if with_public:
+            filters.append('with_public=true')
         if all_plugins:
             filters.append('all_plugins=true')
 
