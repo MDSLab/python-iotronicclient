@@ -10,16 +10,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import argparse
-import six
-
 from iotronicclient.common.apiclient import exceptions
 from iotronicclient.common import cliutils
 from iotronicclient.common.i18n import _
 from iotronicclient.common import utils
-from iotronicclient import exc
 from iotronicclient.v1 import resource_fields as res_fields
-from iotronicclient.v1 import utils as v1_utils
 
 
 def _print_plugin_show(plugin, fields=None, json=False):
@@ -106,7 +101,6 @@ def do_plugin_list(cc, args):
     """List the plugins which are registered with the Iotronic service."""
     params = {}
 
-
     if args.detail:
         fields = res_fields.PLUGIN_DETAILED_RESOURCE.fields
         field_labels = res_fields.PLUGIN_DETAILED_RESOURCE.labels
@@ -127,7 +121,6 @@ def do_plugin_list(cc, args):
                                                sort_fields,
                                                sort_field_labels))
 
-
     if args.with_public:
         params['with_public'] = args.with_public
 
@@ -139,6 +132,7 @@ def do_plugin_list(cc, args):
                         field_labels=field_labels,
                         sortby_index=None,
                         json_flag=args.json)
+
 
 @cliutils.arg(
     'name',
@@ -170,28 +164,28 @@ def do_plugin_list(cc, args):
     action='append',
     help="Record arbitrary key/value metadata. "
          "Can be specified multiple times.")
-
 def do_plugin_create(cc, args):
     """Register a new plugin with the Iotronic service."""
 
-    field_list = ['name','code','callable','public','extra']
+    field_list = ['name', 'code', 'callable', 'public', 'extra']
 
     fields = dict((k, v) for (k, v) in vars(args).items()
                   if k in field_list and not (v is None))
-    print fields
+
     fields = utils.args_array_to_dict(fields, 'extra')
 
-    f=fields['code']
-    with open(f, 'r') as fil:
+    fl = fields['code']
+    with open(fl, 'r') as fil:
         fields['code'] = fil.read()
 
     if args.params:
         fields['parameters'] = utils.json_from_file(args.params)
 
-
     plugin = cc.plugin.create(**fields)
 
-    data = dict([(f, getattr(plugin, f, '')) for f in res_fields.PLUGIN_DETAILED_RESOURCE.fields])
+    data = dict([(f, getattr(plugin, f, '')) for f in
+                 res_fields.PLUGIN_DETAILED_RESOURCE.fields])
+
     cliutils.print_dict(data, wrap=72, json_flag=args.json)
 
 
@@ -216,6 +210,7 @@ def do_plugin_delete(cc, args):
     if failures:
         raise exceptions.ClientException("\n".join(failures))
 
+
 @cliutils.arg('plugin', metavar='<plugin>', help="Name or UUID of the plugin.")
 @cliutils.arg(
     'attributes',
@@ -227,8 +222,7 @@ def do_plugin_delete(cc, args):
 def do_plugin_update(cc, args):
     """Update information about a registered plugin."""
 
-    patch = {k:v for k,v in (x.split('=') for x in args.attributes[0]) }
+    patch = {k: v for k, v in (x.split('=') for x in args.attributes[0])}
 
-    plugin = cc.plugin.update(args.plugin,patch )
+    plugin = cc.plugin.update(args.plugin, patch)
     _print_plugin_show(plugin, json=args.json)
-

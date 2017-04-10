@@ -28,7 +28,8 @@ class Board(base.Resource):
 
 class BoardManager(base.CreateManager):
     resource_class = Board
-    _creation_attributes = ['name','code','type','location','mobile','extra']
+    _creation_attributes = ['name', 'code', 'type', 'location', 'mobile',
+                            'extra']
     _resource_name = 'boards'
 
     def list(self, status=None, marker=None, limit=None,
@@ -60,12 +61,12 @@ class BoardManager(base.CreateManager):
                        of the resource to be returned. Can not be used
                        when 'detail' is set.
 
-        :param project: Optional string value to get only boards of the project.
+        :param project: Optional string value to get
+                        only boards of the project.
 
         :returns: A list of boards.
 
         """
-
 
         if limit is not None:
             limit = int(limit)

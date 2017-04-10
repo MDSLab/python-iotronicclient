@@ -10,16 +10,10 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import argparse
-import six
-
 from iotronicclient.common.apiclient import exceptions
 from iotronicclient.common import cliutils
 from iotronicclient.common.i18n import _
-from iotronicclient.common import utils
-from iotronicclient import exc
 from iotronicclient.v1 import resource_fields as res_fields
-from iotronicclient.v1 import utils as v1_utils
 
 
 def _print_injected(injection, fields=None, json=False):
@@ -49,10 +43,12 @@ def do_plugin_inject(cc, args):
         onboot = True
     try:
         cc.plugin_injection.plugin_inject(args.board, args.plugin, onboot)
-        print(_('Injected plugin %(plugin)s from board %(board)s') % {'board': args.board, 'plugin': args.plugin})
+        print(_('Injected plugin %(plugin)s from board %(board)s') % {
+            'board': args.board, 'plugin': args.plugin})
     except exceptions.ClientException as e:
         exceptions.ClientException(
-            "Failed to inject plugin on board %(board)s: %(error)s" % {'board': args.board, 'error': e})
+            "Failed to inject plugin on board %(board)s: %(error)s" % {
+                'board': args.board, 'error': e})
 
 
 @cliutils.arg('board',
@@ -64,10 +60,12 @@ def do_plugin_inject(cc, args):
 def do_plugin_remove(cc, args):
     try:
         cc.plugin_injection.plugin_remove(args.board, args.plugin)
-        print(_('Removed plugin %(plugin)s from board %(board)s') % {'board': args.board, 'plugin': args.plugin})
+        print(_('Removed plugin %(plugin)s from board %(board)s') % {
+            'board': args.board, 'plugin': args.plugin})
     except exceptions.ClientException as e:
         exceptions.ClientException(
-            "Failed to remove plugin from board %(board)s: %(error)s" % {'board': args.board, 'error': e})
+            "Failed to remove plugin from board %(board)s: %(error)s" % {
+                'board': args.board, 'error': e})
 
 
 @cliutils.arg('board',
@@ -80,7 +78,8 @@ def do_plugin_remove(cc, args):
               metavar='<action>',
               help="action of the plugin.")
 def do_plugin_action(cc, args):
-    result = cc.plugin_injection.plugin_action(args.board, args.plugin, args.action)
+    result = cc.plugin_injection.plugin_action(args.board, args.plugin,
+                                               args.action)
     print(_('%s') % result)
 
 

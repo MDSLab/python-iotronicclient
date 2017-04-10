@@ -14,7 +14,6 @@ import logging
 
 from iotronicclient.common import base
 from iotronicclient.common.i18n import _
-from iotronicclient.common import utils
 from iotronicclient import exc
 
 LOG = logging.getLogger(__name__)
@@ -38,18 +37,21 @@ class InjectionPluginManager(base.Manager):
         return self._update(path, body, method='PUT')
 
     def plugin_remove(self, board_ident, plugin_ident):
-        path = "%(board)s/plugins/%(plugin)s" % {'board': board_ident, 'plugin': plugin_ident}
+        path = "%(board)s/plugins/%(plugin)s" % {'board': board_ident,
+                                                 'plugin': plugin_ident}
         return self._delete(resource_id=path)
 
     def plugin_action(self, board_ident, plugin_ident, action, params={}):
-        path = "%(board)s/plugins/%(plugin)s" % {'board': board_ident, 'plugin': plugin_ident}
+        path = "%(board)s/plugins/%(plugin)s" % {'board': board_ident,
+                                                 'plugin': plugin_ident}
         body = {"action": action,
                 "parameters": params
                 }
         return self._update(path, body, method='POST')
 
     def plugins_on_board(self, board_ident, marker=None, limit=None,
-                         detail=False, sort_key=None, sort_dir=None, fields=None):
+                         detail=False, sort_key=None, sort_dir=None,
+                         fields=None):
         """Retrieve a list of boards.
 
         :param board_ident: the UUID or name of the board.

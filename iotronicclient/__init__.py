@@ -18,7 +18,6 @@ import pbr.version
 from iotronicclient import client
 from iotronicclient import exc as exceptions
 
-
 __version__ = pbr.version.VersionInfo('python-iotronicclient').version_string()
 
 __all__ = (
@@ -26,4 +25,3 @@ __all__ = (
     'exc',
     'exceptions',
 )
-

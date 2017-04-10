@@ -39,14 +39,13 @@ from iotronicclient.common.i18n import _LE
 from iotronicclient.common.i18n import _LW
 from iotronicclient import exc
 
-
 # NOTE(deva): Record the latest version that this client was tested with.
 #             We still have a lot of work to do in the client to implement
 #             microversion support in the client properly! See
-#             http://specs.openstack.org/openstack/iotronic-specs/specs/kilo/api-microversions.html # noqa
+#             http://specs.openstack.org/openstack/iotronic-specs/specs/kilo/
+#             api-microversions.html # noqa
 #             for full details.
 DEFAULT_VER = '1.9'
-
 
 LOG = logging.getLogger(__name__)
 USER_AGENT = 'python-iotronicclient'
@@ -55,11 +54,9 @@ CHUNKSIZE = 1024 * 64  # 64kB
 API_VERSION = '/v1'
 API_VERSION_SELECTED_STATES = ('user', 'negotiated', 'cached', 'default')
 
-
 DEFAULT_MAX_RETRIES = 5
 DEFAULT_RETRY_INTERVAL = 2
 SENSITIVE_HEADERS = ('X-Auth-Token',)
-
 
 SUPPORTED_ENDPOINT_SCHEME = ('http', 'https')
 
@@ -114,7 +111,8 @@ class VersionNegotiationMixin(object):
             LOG.debug('No version header in response, requesting from server')
             if self.os_iotronic_api_version:
                 base_version = ("/v%s" %
-                                str(self.os_iotronic_api_version).split('.')[0])
+                                str(self.os_iotronic_api_version).split('.')[
+                                    0])
             else:
                 base_version = API_VERSION
             resp = self._make_simple_request(conn, 'GET', base_version)
@@ -177,6 +175,7 @@ _RETRY_EXCEPTIONS = (exc.Conflict, exc.ServiceUnavailable,
 
 def with_retries(func):
     """Wrapper for _http_request adding support for retries."""
+
     @functools.wraps(func)
     def wrapper(self, url, method, **kwargs):
         if self.conflict_max_retries is None:
@@ -205,14 +204,13 @@ def with_retries(func):
 
 
 class HTTPClient(VersionNegotiationMixin):
-
     def __init__(self, endpoint, **kwargs):
         self.endpoint = endpoint
         self.endpoint_trimmed = _trim_endpoint_api_version(endpoint)
         self.auth_token = kwargs.get('token')
         self.auth_ref = kwargs.get('auth_ref')
         self.os_iotronic_api_version = kwargs.get('os_iotronic_api_version',
-                                                DEFAULT_VER)
+                                                  DEFAULT_VER)
         self.api_version_select_state = kwargs.get(
             'api_version_select_state', 'default')
         self.conflict_max_retries = kwargs.pop('max_retries',
@@ -335,7 +333,9 @@ class HTTPClient(VersionNegotiationMixin):
 
             # TODO(deva): implement graceful client downgrade when connecting
             # to servers that did not support microversions. Details here:
-            # http://specs.openstack.org/openstack/iotronic-specs/specs/kilo/api-microversions.html#use-case-3b-new-client-communicating-with-a-old-iotronic-user-specified  # noqa
+            # http://specs.openstack.org/openstack/iotronic-specs/specs/kilo/
+            # api-microversions.html#use-case-3b-new-client-communicating-with
+            # -a-old-iotronic-user-specified  # noqa
 
             if resp.status_code == http_client.NOT_ACCEPTABLE:
                 negotiated_ver = self.negotiate_version(self.session, resp)
@@ -345,7 +345,7 @@ class HTTPClient(VersionNegotiationMixin):
 
         except requests.exceptions.RequestException as e:
             message = (_("Error has occurred while handling "
-                       "request for %(url)s: %(e)s") %
+                         "request for %(url)s: %(e)s") %
                        dict(url=conn_url, e=e))
             # NOTE(aarefiev): not valid request(invalid url, missing schema,
             # and so on), retrying is not needed.
@@ -366,7 +366,8 @@ class HTTPClient(VersionNegotiationMixin):
 
         if resp.status_code >= http_client.BAD_REQUEST:
             error_json = _extract_error_json(body_str)
-            # NOTE(vdrok): exceptions from iotronic controllers' _lookup methods
+            # NOTE(vdrok): exceptions from iotronic controllers'
+            # _lookup methods
             # are constructed directly by pecan instead of wsme, and contain
             # only description field
             raise exc.from_response(
@@ -394,9 +395,9 @@ class HTTPClient(VersionNegotiationMixin):
         resp, body_iter = self._http_request(url, method, **kwargs)
         content_type = resp.headers.get('Content-Type')
 
-        if (resp.status_code in (http_client.NO_CONTENT,
-                                 http_client.RESET_CONTENT)
-                or content_type is None):
+        if (resp.status_code in (
+                http_client.NO_CONTENT,
+                http_client.RESET_CONTENT) or content_type is None):
             return resp, list()
 
         if 'application/json' in content_type:
@@ -534,7 +535,8 @@ class SessionClient(VersionNegotiationMixin, adapter.LegacyJsonAdapter):
             return self._http_request(url, method, **kwargs)
         if resp.status_code >= http_client.BAD_REQUEST:
             error_json = _extract_error_json(resp.content)
-            # NOTE(vdrok): exceptions from iotronic controllers' _lookup methods
+            # NOTE(vdrok): exceptions from iotronic controllers' _lookup
+            # methods
             # are constructed directly by pecan instead of wsme, and contain
             # only description field
             raise exc.from_response(resp, (error_json.get('faultstring') or
@@ -561,7 +563,8 @@ class SessionClient(VersionNegotiationMixin, adapter.LegacyJsonAdapter):
         body = resp.content
         content_type = resp.headers.get('content-type', None)
         status = resp.status_code
-        if (status in (http_client.NO_CONTENT, http_client.RESET_CONTENT) or
+        if (status in (
+                http_client.NO_CONTENT, http_client.RESET_CONTENT) or
                 content_type is None):
             return resp, list()
         if 'application/json' in content_type:

@@ -348,7 +348,8 @@ class IotronicShell(object):
             self.do_bash_completion()
             return 0
 
-        if not (args.os_auth_token and (args.iotronic_url or args.os_auth_url)):
+        if not (args.os_auth_token and (args.iotronic_url or args.os_auth_url)
+                ):
             if not args.os_username:
                 raise exc.CommandError(_("You must provide a username via "
                                          "either --os-username or via "

@@ -28,12 +28,13 @@ class Plugin(base.Resource):
 
 class PluginManager(base.CreateManager):
     resource_class = Plugin
-    _creation_attributes = ['name','code','public','callable','parameters','extra']
+    _creation_attributes = ['name', 'code', 'public', 'callable', 'parameters',
+                            'extra']
     _resource_name = 'plugins'
 
     def list(self, marker=None, limit=None,
              detail=False, sort_key=None, sort_dir=None, fields=None,
-             with_public=False,all_plugins=False):
+             with_public=False, all_plugins=False):
         """Retrieve a list of plugins.
 
         :param marker: Optional, the UUID of a plugin, eg the last
@@ -59,9 +60,9 @@ class PluginManager(base.CreateManager):
         :param fields: Optional, a list with a specified set of fields
                        of the resource to be returned. Can not be used
                        when 'detail' is set.
-                       
+
         :param with_public: Optional boolean value to get also public plugins.
-        
+
         :param all_plugins: Optional boolean value to get all plugins.
 
         :returns: A list of plugins.

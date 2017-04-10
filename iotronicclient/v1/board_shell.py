@@ -10,16 +10,11 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
-import argparse
-import six
-
 from iotronicclient.common.apiclient import exceptions
 from iotronicclient.common import cliutils
 from iotronicclient.common.i18n import _
 from iotronicclient.common import utils
-from iotronicclient import exc
 from iotronicclient.v1 import resource_fields as res_fields
-from iotronicclient.v1 import utils as v1_utils
 
 
 def _print_board_show(board, fields=None, json=False):
@@ -103,7 +98,7 @@ def do_board_list(cc, args):
     params = {}
 
     if args.status:
-        params['status']=args.status
+        params['status'] = args.status
 
     if args.project is not None:
         params['project'] = args.project
@@ -133,6 +128,7 @@ def do_board_list(cc, args):
                         field_labels=field_labels,
                         sortby_index=None,
                         json_flag=args.json)
+
 
 @cliutils.arg(
     'name',
@@ -170,19 +166,21 @@ def do_board_list(cc, args):
     action='append',
     help="Record arbitrary key/value metadata. "
          "Can be specified multiple times.")
-
 def do_board_create(cc, args):
     """Register a new board with the Iotronic service."""
-    field_list = ['name','code','type','mobile','extra']
+    field_list = ['name', 'code', 'type', 'mobile', 'extra']
 
     fields = dict((k, v) for (k, v) in vars(args).items()
                   if k in field_list and not (v is None))
     fields = utils.args_array_to_dict(fields, 'extra')
 
-    fields['location']=[{'latitude':args.latitude,'longitude':args.longitude,'altitude':args.altitude}]
+    fields['location'] = [
+        {'latitude': args.latitude, 'longitude': args.longitude,
+         'altitude': args.altitude}]
 
     board = cc.board.create(**fields)
-    data = dict([(f, getattr(board, f, '')) for f in res_fields.BOARD_DETAILED_RESOURCE.fields])
+    data = dict([(f, getattr(board, f, '')) for f in
+                 res_fields.BOARD_DETAILED_RESOURCE.fields])
     cliutils.print_dict(data, wrap=72, json_flag=args.json)
 
 
@@ -219,7 +217,7 @@ def do_board_delete(cc, args):
 def do_board_update(cc, args):
     """Update information about a registered board."""
 
-    patch = {k:v for k,v in (x.split('=') for x in args.attributes[0]) }
+    patch = {k: v for k, v in (x.split('=') for x in args.attributes[0])}
 
-    board = cc.board.update(args.board,patch )
+    board = cc.board.update(args.board, patch)
     _print_board_show(board, json=args.json)

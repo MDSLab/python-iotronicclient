@@ -40,7 +40,7 @@ class Resource(object):
         'created_at': 'Created At',
         'status': 'Status',
         'code': 'Code',
-        'mobile':'Mobile',
+        'mobile': 'Mobile',
         'session': 'Session',
         'location': 'Location',
         'owner': 'Owner',
@@ -155,9 +155,9 @@ BOARD_DETAILED_RESOURCE = Resource(
         'project',
         'owner',
 
-     ],
+    ],
     sort_excluded=[
-        'extra','location','session',
+        'extra', 'location', 'session',
     ])
 BOARD_RESOURCE = Resource(
     ['uuid',
@@ -179,7 +179,7 @@ PLUGIN_DETAILED_RESOURCE = Resource(
 
      ],
     sort_excluded=[
-        'extra','code',
+        'extra', 'code',
     ])
 PLUGIN_RESOURCE = Resource(
     ['uuid',
@@ -191,12 +191,12 @@ PLUGIN_RESOURCE = Resource(
 
 PLUGIN_INJECT_RESOURCE_ON_BOARD = Resource(
     [
-     'plugin',
-     'status',
-     'onboot',
-     'created_at',
-     'updated_at',
-     ])
+        'plugin',
+        'status',
+        'onboot',
+        'created_at',
+        'updated_at',
+    ])
 
 PLUGIN_INJECT_RESOURCE = Resource(
     ['board_uuid',
