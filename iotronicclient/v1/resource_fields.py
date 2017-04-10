@@ -53,47 +53,47 @@ class Resource(object):
         'plugin': 'Plugin',
         'parameters': 'Parameters',
 
-
-        'address': 'Address',
-        'async': 'Async',
-        'attach': 'Response is attachment',
-        'chassis_uuid': 'Chassis UUID',
-        'clean_step': 'Clean Step',
-        'console_enabled': 'Console Enabled',
-        'description': 'Description',
-        'http_methods': 'Supported HTTP methods',
-        'inspection_finished_at': 'Inspection Finished At',
-        'inspection_started_at': 'Inspection Started At',
-        'instance_info': 'Instance Info',
-        'instance_uuid': 'Instance UUID',
-        'internal_info': 'Internal Info',
-        'last_error': 'Last Error',
-        'maintenance': 'Maintenance',
-        'maintenance_reason': 'Maintenance Reason',
-        'mode': 'Mode',
-        'power_state': 'Power State',
-        'properties': 'Properties',
-        'provision_state': 'Provisioning State',
-        'provision_updated_at': 'Provision Updated At',
-        'raid_config': 'Current RAID configuration',
-        'reservation': 'Reservation',
-        'resource_class': 'Resource Class',
-        'target_power_state': 'Target Power State',
-        'target_provision_state': 'Target Provision State',
-        'target_raid_config': 'Target RAID configuration',
-        'local_link_connection': 'Local Link Connection',
-        'pxe_enabled': 'PXE boot enabled',
-        'portgroup_uuid': 'Portgroup UUID',
-        'boot_interface': 'Boot Interface',
-        'console_interface': 'Console Interface',
-        'deploy_interface': 'Deploy Interface',
-        'inspect_interface': 'Inspect Interface',
-        'management_interface': 'Management Interface',
-        'network_interface': 'Network Interface',
-        'power_interface': 'Power Interface',
-        'raid_interface': 'RAID Interface',
-        'vendor_interface': 'Vendor Interface',
-        'standalone_ports_supported': 'Standalone Ports Supported',
+        #
+        # 'address': 'Address',
+        # 'async': 'Async',
+        # 'attach': 'Response is attachment',
+        # 'chassis_uuid': 'Chassis UUID',
+        # 'clean_step': 'Clean Step',
+        # 'console_enabled': 'Console Enabled',
+        # 'description': 'Description',
+        # 'http_methods': 'Supported HTTP methods',
+        # 'inspection_finished_at': 'Inspection Finished At',
+        # 'inspection_started_at': 'Inspection Started At',
+        # 'instance_info': 'Instance Info',
+        # 'instance_uuid': 'Instance UUID',
+        # 'internal_info': 'Internal Info',
+        # 'last_error': 'Last Error',
+        # 'maintenance': 'Maintenance',
+        # 'maintenance_reason': 'Maintenance Reason',
+        # 'mode': 'Mode',
+        # 'power_state': 'Power State',
+        # 'properties': 'Properties',
+        # 'provision_state': 'Provisioning State',
+        # 'provision_updated_at': 'Provision Updated At',
+        # 'raid_config': 'Current RAID configuration',
+        # 'reservation': 'Reservation',
+        # 'resource_class': 'Resource Class',
+        # 'target_power_state': 'Target Power State',
+        # 'target_provision_state': 'Target Provision State',
+        # 'target_raid_config': 'Target RAID configuration',
+        # 'local_link_connection': 'Local Link Connection',
+        # 'pxe_enabled': 'PXE boot enabled',
+        # 'portgroup_uuid': 'Portgroup UUID',
+        # 'boot_interface': 'Boot Interface',
+        # 'console_interface': 'Console Interface',
+        # 'deploy_interface': 'Deploy Interface',
+        # 'inspect_interface': 'Inspect Interface',
+        # 'management_interface': 'Management Interface',
+        # 'network_interface': 'Network Interface',
+        # 'power_interface': 'Power Interface',
+        # 'raid_interface': 'RAID Interface',
+        # 'vendor_interface': 'Vendor Interface',
+        # 'standalone_ports_supported': 'Standalone Ports Supported',
 
     }
 
@@ -206,65 +206,3 @@ PLUGIN_INJECT_RESOURCE = Resource(
      'created_at',
      'updated_at',
      ])
-
-# Ports
-PORT_DETAILED_RESOURCE = Resource(
-    ['uuid',
-     'address',
-     'created_at',
-     'extra',
-     'board_uuid',
-     'local_link_connection',
-     'portgroup_uuid',
-     'pxe_enabled',
-     'updated_at',
-     'internal_info',
-     ],
-    sort_excluded=[
-        'extra',
-        # The server cannot sort on "board_uuid" or "portgroup_uuid" because
-        # they aren't columns in the "ports" database table. "board_id" and
-        # "portgroup_id" are stored, but it is internal to iotronic.
-        # See bug #1443003 for more details.
-        'board_uuid',
-        'portgroup_uuid',
-        'internal_info',
-    ])
-PORT_RESOURCE = Resource(
-    ['uuid',
-     'address',
-     ])
-
-# Portgroups
-PORTGROUP_DETAILED_RESOURCE = Resource(
-    ['uuid',
-     'address',
-     'created_at',
-     'extra',
-     'standalone_ports_supported',
-     'board_uuid',
-     'name',
-     'updated_at',
-     'internal_info',
-     'mode',
-     'properties',
-     ],
-    sort_excluded=[
-        'extra',
-        # The server cannot sort on "board_uuid" because it isn't a column in
-        # the "portgroups" database table. "board_id" is stored, but it is
-        # internal to iotronic. See bug #1443003 for more details.
-        'board_uuid',
-        'internal_info',
-        'properties',
-    ])
-PORTGROUP_RESOURCE = Resource(
-    ['uuid',
-     'address',
-     'name',
-     ])
-
-# VIFs
-VIF_RESOURCE = Resource(
-    ['id'],
-)

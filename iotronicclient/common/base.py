@@ -171,7 +171,6 @@ class Manager(object):
         return object_list
 
     def _list(self, url, response_key=None, obj_class=None, body=None):
-
         resp, body = self.api.json_request('GET', url)
 
         if obj_class is None:
